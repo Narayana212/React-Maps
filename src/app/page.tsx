@@ -1,113 +1,360 @@
-import Image from 'next/image'
+"use client";
+import React, { useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import SimpleMap from '../app/components/simple-map'
 
-export default function Home() {
+
+const Map = () => {
+  const [mapCenter] = useState([37.7749, -100.4194]);
+  const [markers, setMarkers] = useState([
+    {
+      state: "Alabama",
+      capital: "Montgomery",
+      position: [32.3668, -86.2999],
+      content: "Alabama",
+    },
+    {
+      state: "Alaska",
+      capital: "Juneau",
+      position: [58.3019, -134.4197],
+      content: "Alaska",
+    },
+    {
+      state: "Arizona",
+      capital: "Phoenix",
+      position: [33.4484, -112.074],
+      content: "Arizona",
+    },
+    {
+      state: "Arkansas",
+      capital: "Little Rock",
+      position: [34.7465, -92.2896],
+      content: "Arkansas",
+    },
+    {
+      state: "California",
+      capital: "Sacramento",
+      position: [38.576, -121.4939],
+      content: "California",
+    },
+    {
+      state: "Colorado",
+      capital: "Denver",
+      position: [39.7392, -104.9903],
+      content: "Colorado",
+    },
+    {
+      state: "Connecticut",
+      capital: "Hartford",
+      position: [41.7637, -72.6851],
+      content: "Connecticut",
+    },
+    {
+      state: "Delaware",
+      capital: "Dover",
+      position: [39.1582, -75.5244],
+      content: "Delaware",
+    },
+    {
+      state: "Florida",
+      capital: "Tallahassee",
+      position: [30.4383, -84.2807],
+      content: "Florida",
+    },
+    {
+      state: "Georgia",
+      capital: "Atlanta",
+      position: [33.749, -84.388],
+      content: "Georgia",
+    },
+    {
+      state: "Hawaii",
+      capital: "Honolulu",
+      position: [21.3069, -157.8583],
+      content: "Hawaii",
+    },
+    {
+      state: "Idaho",
+      capital: "Boise",
+      position: [43.615, -116.2023],
+      content: "Idaho",
+    },
+    {
+      state: "Illinois",
+      capital: "Springfield",
+      position: [39.7817, -89.6501],
+      content: "Illinois",
+    },
+    {
+      state: "Indiana",
+      capital: "Indianapolis",
+      position: [39.7684, -86.1581],
+      content: "Indiana",
+    },
+    {
+      state: "Iowa",
+      capital: "Des Moines",
+      position: [41.5868, -93.625],
+      content: "Iowa",
+    },
+    {
+      state: "Kansas",
+      capital: "Topeka",
+      position: [39.0558, -95.689],
+      content: "Kansas",
+    },
+    {
+      state: "Kentucky",
+      capital: "Frankfort",
+      position: [38.1867, -84.8754],
+      content: "Kentucky",
+    },
+    {
+      state: "Louisiana",
+      capital: "Baton Rouge",
+      position: [30.4515, -91.1871],
+      content: "Louisiana",
+    },
+    {
+      state: "Maine",
+      capital: "Augusta",
+      position: [44.3106, -69.7795],
+      content: "Maine",
+    },
+    {
+      state: "Maryland",
+      capital: "Annapolis",
+      position: [38.9784, -76.4922],
+      content: "Maryland",
+    },
+    {
+      state: "Massachusetts",
+      capital: "Boston",
+      position: [42.3601, -71.0589],
+      content: "Massachusetts",
+    },
+    {
+      state: "Michigan",
+      capital: "Lansing",
+      position: [42.7325, -84.5555],
+      content: "Michigan",
+    },
+    {
+      state: "Minnesota",
+      capital: "St. Paul",
+      position: [44.9537, -93.09],
+      content: "Minnesota",
+    },
+    {
+      state: "Mississippi",
+      capital: "Jackson",
+      position: [32.2988, -90.1848],
+      content: "Mississippi",
+    },
+    {
+      state: "Missouri",
+      capital: "Jefferson City",
+      position: [38.5767, -92.1735],
+      content: "Missouri",
+    },
+    {
+      state: "Montana",
+      capital: "Helena",
+      position: [46.5896, -112.0391],
+      content: "Montana",
+    },
+    {
+      state: "Nebraska",
+      capital: "Lincoln",
+      position: [40.8136, -96.7026],
+      content: "Nebraska",
+    },
+    {
+      state: "Nevada",
+      capital: "Carson City",
+      position: [39.1639, -119.7661],
+      content: "Nevada",
+    },
+    {
+      state: "New Hampshire",
+      capital: "Concord",
+      position: [43.2081, -71.5374],
+      content: "New Hampshire",
+    },
+    {
+      state: "New Jersey",
+      capital: "Trenton",
+      position: [40.2206, -74.7597],
+      content: "New Jersey",
+    },
+    {
+      state: "New Mexico",
+      capital: "Santa Fe",
+      position: [35.6869, -105.9378],
+      content: "New Mexico",
+    },
+    {
+      state: "New York",
+      capital: "Albany",
+      position: [42.6526, -73.7562],
+      content: "New York",
+    },
+    {
+      state: "North Carolina",
+      capital: "Raleigh",
+      position: [35.7796, -78.6382],
+      content: "North Carolina",
+    },
+    {
+      state: "North Dakota",
+      capital: "Bismarck",
+      position: [46.8083, -100.7837],
+      content: "North Dakota",
+    },
+    {
+      state: "Ohio",
+      capital: "Columbus",
+      position: [39.9612, -82.9988],
+      content: "Ohio",
+    },
+    {
+      state: "Oklahoma",
+      capital: "Oklahoma City",
+      position: [35.4676, -97.5164],
+      content: "Oklahoma",
+    },
+    {
+      state: "Oregon",
+      capital: "Salem",
+      position: [44.9429, -123.0351],
+      content: "Oregon",
+    },
+    {
+      state: "Pennsylvania",
+      capital: "Harrisburg",
+      position: [40.2732, -76.8867],
+      content: "Pennsylvania",
+    },
+    {
+      state: "Rhode Island",
+      capital: "Providence",
+      position: [41.8236, -71.4227],
+      content: "Rhode Island",
+    },
+    {
+      state: "South Carolina",
+      capital: "Columbia",
+      position: [34.0007, -81.0348],
+      content: "South Carolina",
+    },
+    {
+      state: "South Dakota",
+      capital: "Pierre",
+      position: [44.3683, -100.351],
+      content: "South Dakota",
+    },
+    {
+      state: "Tennessee",
+      capital: "Nashville",
+      position: [36.1627, -86.7816],
+      content: "Tennessee",
+    },
+    {
+      state: "Texas",
+      capital: "Austin",
+      position: [30.25, -97.75],
+      content: "Texas",
+    },
+    {
+      state: "Utah",
+      capital: "Salt Lake City",
+      position: [40.75, -111.8833],
+      content: "Utah",
+    },
+    {
+      state: "Vermont",
+      capital: "Montpelier",
+      position: [44.2664, -72.5719],
+      content: "Vermont",
+    },
+    {
+      state: "Virginia",
+      capital: "Richmond",
+      position: [37.54, -77.4336],
+      content: "Virginia",
+    },
+    {
+      state: "Washington",
+      capital: "Olympia",
+      position: [47.0425, -122.8931],
+      content: "Washington",
+    },
+    {
+      state: "West Virginia",
+      capital: "Charleston",
+      position: [38.3498, -81.6326],
+      content: "West Virginia",
+    },
+    {
+      state: "Wisconsin",
+      capital: "Madison",
+      position: [43.0731, -89.4012],
+      content: "Wisconsin",
+    },
+    {
+      state: "Wyoming",
+      capital: "Cheyenne",
+      position: [41.1456, -104.802],
+      content: "Wyoming",
+    },
+  ]);
+  const customIcon = new L.Icon({
+    iconUrl: "/pin1.png",
+    iconSize: [40, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+  });
+  
+
+  
+
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+    <div className="mx-auto w-full overflow-x-hidden mt-3  max-w-screen-xl px-2.5 md:px-20 " >
+    <div className="border-2 ">
+    <h1 className="text-xl font-bold mb-3">Custom POI</h1>
+    <MapContainer
+        // @ts-ignore
+        center={mapCenter}
+        zoom={4.5}
+        style={{ height: "50vh", width: "100%",border:"black" }}
+        scrollWheelZoom={false}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          // @ts-ignore
         />
-      </div>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+        {markers.map((marker, index) => (
+          // @ts-ignore
+          <Marker key={index} position={marker.position} icon={customIcon}>
+            <Popup>
+              <div>
+                <h2>{marker.capital}</h2>
+                <p>{marker.content}</p>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+      <SimpleMap/>
+    
+    </div>
+  );
+};
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+export default Map;
